@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  <title>Alex Rusnak</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<body>
+	 <nav class="blue-lighten" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="index.html" class="brand-logo"><img src = "Logo.png" style="width:110
+      px;height:50px;" border="10px";> </a>
+      <ul class="right hide-on-med-and-down">
+         <li><a href="portfolio.html">Design</a></li>
+        <li><a href="code.html">Code</a></li>
+        <li><a href="#">Art</a></li>
+        <li><a href="#">Resume</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="portfolio.html">Design</a></li>
+        <li><a href="code.html">Code</a></li>
+        <li><a href="#">Art</a></li>
+        <li><a href="#">Resume</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+                 <div class="card black">
+            <div class="card-content white-text">
+              <span class="card-title">Code Samples</span>
+              <p>Below are examples of code for some of the projects I've worked on. More code can be seen at the below link to my Github account.</p>
+            </div>
+            <div class="card-action">
+              <a color="white" href="#">amrusnak Github</a>
+            </div>
+          </div>
+
+            <div class="card black">
+            <div class="card-content white-text">
+              <span class="card-title">Queen City Hackathon Predictive Model</span>
+              <p>The two links below contain the data shaping process and the predictive model I wrote for the my team's program at the 2017 Queen City Hackathon. The full program ( which can be seen on my github account) allows users to pick particular Charlotte neighborhoods and simulate the economic effect of various actions like increasing education funding or public transit availability. I used python with the numpy, pandas, and scikit-learn libraries. The model used was a random forest regressor with cross validation for hyperparameter optimization.
+              Our program was selected by the judges as a winner from a field of 34 teams. </p>
+            </div>
+            <div class="card-action">
+              <a href="Charlotte1.html">Data Shaping</a>
+              <a href="QCHMODELS.2.html">Model Training</a>
+            </div>
+          </div>
+
+
+   <div class="card light black">
+              <div class="card-content white-text">
+                <p>This is the C++ code for a polygon calculator. It allows you add, substract, and multiply different vector shapes (as you would in a program like adobe illustrator). This is a strong example of working with multiple files and headers as well as an object oriented approach.</p>
+              </div>
+              <div class="card-tabs">
+                <ul class="tabs tabs-fixed-width tabs-transparent">
+                  <li class="tab"><a class="active" href="#test1">main.cc</a></li>
+                  <li class="tab"><a href="#test2">point2d.cc</a></li>
+                  <li class="tab"><a href="#test3">vector2d.cc</a></li>
+                  <li class="tab"><a href="#test4">polygon.cc</a></li>
+                  <li class="tab"><a href="#test8">main.h</a></li>
+                  <li class="tab"><a href="#test5">point2d.h</a></li>
+                  <li class="tab"><a href="#test6">vector2d.h</a></li>
+                  <li class="tab"><a href="#test7">polygon.h</a></li>
+                  <li class="tab"><a href="#test9">vertexnode.h</a></li>
+                </ul>
+              </div>
+              <div class="card-content blue lighten-5">
+                <div id="test1"><pre>
+#include "main.h"
+int main(int argc, char** argv) {
+cout << "Usage:" << endl; 
+cout << "(1) calc poly.in + number_x number_y" << endl;
+cout << "(2) calc poly.in + offsets.in polys.out" << endl;
+cout << "(3) calc poly.in x number_scalar number_x number_y" << endl; // printing out the options for the user
+cout << "(4) calc poly.in + by.in about.in polys.out" << endl;
+int input;
+cin >> input; 
+string polyInput;
+cin >> polyInput;
+ifstream fin;
+fin.open(polyInput); // opens the original polygon file
+if ( fin.fail() ) {
+  cout << "poly.in" << " does not exist." << endl;
+  return 2;
+}
+
+int count;
+fin >> count;
+csce240::Point2d *pointHolder = new csce240::Point2d[count]; // creates point array to store points in 
+for (int i = 0; i < count; ++i){ // stores points in array
+  double x; 
+  double y; 
+  fin >> x >> y; 
+  csce240::Point2d tmp(x,y);
+  pointHolder[i] = tmp;
+}
+csce240::Polygon orgPoly; 
+int z = orgPoly.Init(pointHolder, count); // intializes polygon
+if (z!=0) { // checks init was successful
+  cout << "Your input file does not contain a real polygon." << endl; 
+}
+fin.close();
+
+if (input == 1){ // first option
+  double offX;
+  double offY; 
+  cin >> offX >> offY; 
+  csce240::Vector2d offset(offX, offY); // creates vector of input points
+  orgPoly.Offset(offset);
+   cout << orgPoly.ToString() << endl;
+}
+
+if (input == 2){ // second option
+  string inputName;
+  string outputName; 
+  cin >> inputName >> outputName; 
+  ifstream fin;
+  fin.open(inputName); // opens input file 
+  if ( fin.fail() ) {
+    cout << "inputName" << " does not exist." << endl;
+    return 2;
+  }
+  int count;
+  fin >> count;
+  csce240::Vector2d *offsetVectors = new csce240::Vector2d[count]; // creates vector array to store vectors for offsetting
+  ofstream fout; 
+  fout.open(outputName);
+  for (int i = 0; i < count; ++i){
+    double x; 
+    double y; 
+    fin >> x >> y; 
+    csce240::Vector2d tmp(x,y); 
+    offsetVectors[i] = tmp; // stores vector
+    csce240::Polygon holder = orgPoly;
+    holder.Offset(offsetVectors[i]); // ofsets replica polygon 
+    fout << holder.ToString() << endl; // sends polygon to file 
+    }
+  fin.close();
+  fout.close();
+}
+
+if (input == 3){ // option 3
+  double scalar;
+  double aboutX;
+  double aboutY; 
+  cin >> scalar >> aboutX >> aboutY; // sets scalar and about axis
+  csce240::Point2d about(aboutX, aboutY); // puts axis x and y into single point
+  orgPoly.Scale(scalar, about); // scales polygon with given values
+  cout << orgPoly.ToString() << endl; 
+}
+
+if (input == 4){ // option 4
+  string scalarName;
+  string aboutName;
+  string outputName; 
+  cin >> scalarName >> aboutName >> outputName;  // takes input
+  ifstream fin;
+  fin.open(scalarName); // opens scalar file
+  if ( fin.fail() ) {
+    cout << "By file" << " does not exist." << endl;
+    return 2;
+  }
+  int count;
+  fin >> count;
+  double *scalarHolder = new double[count]; // double array for holding scalars
+  for (int i = 0; i < count; ++i){ // populates array
+    double scalar; 
+    fin >> scalar;
+    scalarHolder[i] = scalar;
+  }
+  fin.close();
+  fin.open(aboutName); // opens about file
+  if ( fin.fail() ) {
+    cout << "About file" << " does not exist." << endl;
+    return 2;
+  }
+  int countTwo;
+  fin >> countTwo;
+  csce240::Point2d *pointHolder = new csce240::Point2d[count]; // point array for storing about points
+  ofstream fout; 
+  fout.open(outputName);
+  for (int i = 0; i < countTwo; ++i){ // advances through the about file
+    double x; 
+    double y; 
+    fin >> x >> y; 
+    csce240::Point2d tmp(x,y); // creates point from x and y values
+    pointHolder[i] = tmp; // adds to array
+    csce240::Polygon holder = orgPoly;
+    for (int j = 0; j < count; ++ j ){ //applies multiple scalars to each point set
+    holder.Scale(scalarHolder[j],pointHolder[i]); // scales by scalar and point
+    fout << holder.ToString() << endl; // sends to file 
+    }
+  }
+  fin.close();
+}
+return 0;
+}
+
+</pre>
+</div>
+<div id="test7"><pre>
+#ifndef CSCE240_POLYGON_H
+#define CSCE240_POLYGON_H
+
+#include <string>
+#include <vector>
+#include <list>
+#include <iostream>
+#include <assert.h>
+
+#include "VertexNode.h"
+#include "point2d.h"
+#include "vector2d.h"
+
+namespace csce240
+{
+class Polygon
+{
+private:
+  int size_;
+
+  VertexNode vertices_;
+public:
+  static const unsigned char k_init_success_ = 0;
+
+  static const unsigned char k_init_not_polygon_ = 1; 
+
+  static const unsigned char k_init_nonunique_ = 2;
+
+  static const unsigned char k_init_has_collinear_ = 3;
+
+
+private:
+  void Add(Point2d& vertex);
+
+  void ClearVertices();
+
+public:
+  
+  
+  
+  Polygon();
+  
+  Polygon(Polygon& original);
+
+  ~Polygon();
+
+  int Init(Point2d* vertices, int count);
+
+  void Offset(Vector2d by);
+
+  void Scale(double by, Point2d about);
+
+  inline int size() const
+  {
+    return 0;
+  };
+
+  string ToString() const;
+
+  
+
+};
+
+}  // namespace csce240
+#endif
+
+  </pre></div>
+                <div id="test2"><pre>
+#include "point2d.h"
+
+namespace csce240 {
+
+Point2d Point2d::Scale(const Vector2d scalar) const {
+  double newX = x_ * scalar.x(); 
+  double newY = y_ * scalar.y();
+  Point2d output(newX, newY);
+  return output;
+}
+
+
+ostream& operator<<(ostream& lhs, Point2d& rhs){
+  lhs << "("  << rhs.x() << ", " << rhs.y() << ")";
+  return lhs;
+}
+
+const Point2d operator+(const Point2d& lhs, const Vector2d& rhs){
+  return lhs.Add(rhs);
+}
+
+const bool operator==(const Point2d& lhs, const Point2d& rhs){
+  return lhs.EqualTo(rhs);
+}
+
+const Vector2d operator-(const Point2d& lhs, const Point2d& rhs){
+  return lhs.Subtract(rhs);
+}
+
+const bool operator!=(Point2d& lhs, Point2d& rhs){
+  return lhs.NotEqualTo(rhs);
+}
+
+
+Vector2d Point2d::Subtract(const Point2d& rhs) const { 
+  double newX = x_ - rhs.x();
+  double newY = y_ - rhs.y();
+  Vector2d output(newX, newY);
+  cout <<"ok" <<  output.y() << endl; 
+  return output;
+}
+
+Point2d Point2d::Add(const Vector2d& rhs) const {
+  double newX = x_ + rhs.x();
+  double newY = y_ + rhs.y();
+  Point2d output(newX, newY);
+  return output;
+}
+
+bool Point2d::EqualTo(const Point2d& rhs) const {
+  if( (x_ == rhs.x()) && (y_ == rhs.y())) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+bool Point2d::NotEqualTo(Point2d& rhs) const {
+if( (x_ == rhs.x()) && (y_ == rhs.y())) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+double Point2d::DistanceToSquared(Point2d& to) const
+{
+  double xDistance = to.x() - x_;
+  double yDistance = to.y() - y_;
+  double squaredDistance = ((pow(xDistance, 2)) + (pow(yDistance, 2)));
+  return squaredDistance;
+}
+
+double Point2d::DistanceTo(Point2d& to) const
+{
+  double squaredDistance = DistanceToSquared(to);
+    double distance = sqrt(squaredDistance);
+  return distance;
+}
+
+string Point2d::ToString() const
+{
+  string output = "(" + to_string(x_) + ", " + to_string(y_) + ")";
+  return output;
+}
+} // namespace csce240
+
+
+
+                </pre></div>
+                <div id="test3"><pre>
+#include "vector2d.h" 
+
+namespace csce240 {
+
+ostream& operator<<(ostream& lhs, Vector2d& rhs) {
+  lhs << "("  << rhs.x() << ", " << rhs.y() << ")";
+  return lhs;
+}
+
+const Vector2d operator+(const Vector2d& lhs, const Vector2d& rhs){
+  return lhs.Add(rhs);
+} 
+
+const bool operator==(const Vector2d& lhs,  const Vector2d& rhs){
+  if (lhs.x()==rhs.x() && rhs.y() == lhs.y()){
+    return true;
+  }
+  return false;
+}
+
+const bool operator!=(Vector2d& lhs, Vector2d& rhs){
+  return lhs.NotEqualTo(rhs);
+  }
+
+const Vector2d operator*(const Vector2d& lhs, const double& rhs){
+  return lhs.Scale(rhs);
+}
+
+const Vector2d operator*(const double& lhs, const Vector2d& rhs){
+  return rhs.Scale(lhs);
+}
+
+
+const Vector2d operator-(const Vector2d& rhs){
+  Vector2d output((rhs.x()*-1),(rhs.y()*-1));
+  return output;
+}
+
+const Vector2d operator-(const Vector2d& lhs, const Vector2d& rhs){
+  Vector2d output = lhs.Subtract(rhs);
+  return output; 
+}
+Vector2d Vector2d::Add(const Vector2d& rhs) const {
+  double newX = rhs.x() + x_;
+  double newY = rhs.y() + y_;
+  Vector2d output(newX, newY);
+  return output;
+}
+
+Vector2d Vector2d::Subtract(const Vector2d& rhs) const {
+  double newX = x_ - rhs.x();
+  double newY = y_ - rhs.y();
+  Vector2d output(newX, newY);
+  return output;
+}
+
+Vector2d Vector2d::Reverse() const {
+  double newX = x_ * -1;
+  double newY = y_ * -1;
+  Vector2d output(newX, newY);
+  return output;
+}
+Vector2d Vector2d::ReverseX() const {
+  double newX = x_ * -1;
+  double newY = y_ ;
+  Vector2d output(newX, newY);
+  return output;
+}
+
+Vector2d Vector2d::ReverseY() const {
+  double newX = x_;
+  double newY = y_ * -1;
+  Vector2d output(newX, newY);
+  return output;
+}
+
+Vector2d Vector2d::Scale(const double scalar) const {
+  double newX = x_ * scalar;
+  double newY = y_ * scalar;
+  Vector2d output(newX, newY);
+  return output;
+}
+
+bool Vector2d::EqualTo(Vector2d& rhs) const {
+  if ((rhs.x() == x_) && rhs.y() == y_){
+    return true;
+  } else 
+  return false;
+}
+
+bool Vector2d::NotEqualTo(Vector2d& rhs) const {
+  return !EqualTo(rhs);
+}
+
+double Vector2d::GetLength() const {
+  double xSquared = pow(x_, 2);
+  double ySquared = pow(y_, 2);
+  double magnitude = sqrt(xSquared + ySquared);
+  return magnitude;
+}
+
+Vector2d Vector2d::GetUnit() const {
+  double newX = (x_ / (pow((pow(x_,2) + pow(y_,2)), .5)));
+  double newY = (y_ / (pow((pow(x_,2) + pow(y_,2)), .5)));
+  Vector2d output(newX, newY);
+  return output;
+}
+
+string Vector2d::ToString() const {
+  string xOutput = to_string(x_);
+  string yOutput = to_string(y_);
+  string output =  "("  + xOutput + ", " + yOutput + ")";
+  return output;
+}
+} //namespace csce240
+            </pre></div>
+
+            <div id="test6"><pre>
+#ifndef VECTOR2D_H
+#define VECTOR2D_H
+
+#include < iostream>
+#include < string>
+#include < sstream>
+#include < vector>
+#include < list>
+#include < assert.h>
+#include < cctype>
+#include < cmath>
+#include < iostream>
+
+using std::pow;
+using std::istream;
+using std::ostream;
+using std::to_string;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
+using std::sqrt;
+
+#include "point2d.h"
+
+namespace csce240 {
+
+class Vector2d
+{
+
+private:
+  double x_;
+
+  double y_;
+
+
+public:
+  
+  friend ostream& operator<<(ostream& lhs, Vector2d& rhs);
+  
+  friend const Vector2d operator-(const Vector2d& rhs);
+  
+  friend const Vector2d operator+(const Vector2d& lhs, const Vector2d& rhs);
+  
+  friend const bool operator==(const Vector2d& lhs, const Vector2d& rhs);
+  
+  friend const Vector2d operator-(const Vector2d& lhs, const Vector2d& rhs);
+  
+  friend const Vector2d operator*(const Vector2d& lhs, const double& rhs);
+  
+  friend const Vector2d operator*(const double& lhs, const Vector2d& rhs);
+  
+  friend const bool operator!=(Vector2d& lhs, Vector2d& rhs);
+    
+  inline Vector2d() { x_ = 0.0; y_ = 0.0; };
+
+  inline Vector2d(double x, double y) { x_ = x; y_ = y; };
+
+  inline double x() const{ return x_; };
+
+  inline double y() const{ return y_; };
+
+  Vector2d Add(const Vector2d& rhs) const;
+
+  Vector2d Subtract(const Vector2d& rhs) const;
+
+  Vector2d Reverse() const;
+  Vector2d ReverseX() const;
+  Vector2d ReverseY() const;
+
+  Vector2d Scale(double scalar) const;
+
+  bool EqualTo(Vector2d& rhs) const;
+
+  bool NotEqualTo(Vector2d& rhs) const;
+
+  double GetLength() const;
+
+  Vector2d GetUnit() const;
+
+  string ToString() const;
+
+}; 
+} // namespace csce240
+#endif
+            </pre></div>
+
+            <div id="test5"><pre>
+#ifndef POINT2D_H
+#define POINT2D_H
+
+#include < string>
+#include < vector>
+#include < list>
+#include < iostream>
+#include < assert.h>
+#include < cmath>
+#include < iostream>
+
+using std::istream;
+using std::ostream;
+using std::sqrt;
+using std::pow;
+using std::to_string;
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
+
+#include "vector2d.h"
+
+namespace csce240 { 
+
+class Vector2d;
+
+class Point2d
+{
+private:
+
+  double x_;
+
+  double y_;
+
+
+public:
+
+  
+  friend ostream& operator<<(ostream& lhs, Point2d& rhs);
+  
+  friend const Point2d operator+(const Point2d& lhs, const Vector2d& rhs);
+  
+  friend const bool operator==(const Point2d& lhs, const Point2d& rhs);
+  
+  friend const Vector2d operator-(const Point2d& lhs, const Point2d& rhs);
+  
+  friend const bool operator!=(Point2d& lhs, Point2d& rhs);
+
+  inline Point2d(){ x_=0.0; y_=0.0; };
+
+  inline Point2d(double x, double y) { x_ = x; y_ = y; };
+
+  inline double x() const { return x_; };
+
+  inline double y() const { return y_; };
+  
+  Point2d Scale(const Vector2d scalar) const;
+
+  Vector2d Subtract(const Point2d& rhs) const;
+
+  Point2d Add(const Vector2d& rhs) const;
+
+  bool EqualTo(const Point2d& rhs) const;
+
+  bool NotEqualTo(Point2d& rhs) const;
+
+  double DistanceToSquared(Point2d& to) const;
+
+  double DistanceTo(Point2d& to) const;
+
+  string ToString() const;
+
+};
+} //namespace csce240
+#endif
+
+            </pre></div>
+<div id="test9"><pre>
+#ifndef CSCE240_VERTEX_NODE_H
+#define CSCE240_VERTEX_NODE_H
+
+#include < string>
+#include < vector>
+#include < list>
+#include < iostream>
+#include < assert.h>
+
+#include "point2d.h"
+
+namespace csce240
+{ 
+
+struct VertexNode
+{
+  inline VertexNode(){Point2d one(0,0); vertex_ = one; next_= nullptr; prev_ = nullptr; }
+  VertexNode(Point2d vertex, VertexNode* next = nullptr, VertexNode* prev = nullptr) { vertex_= vertex; next_=next; prev_= prev;};
+  
+  Point2d vertex_;
+  VertexNode *next_, *prev_;
+
+};
+
+}  // namespace csce240
+#endif
+</pre></div>
+
+            <div id="test4"> <pre>
+#include < string>
+#include < vector>
+#include < list>
+#include < iostream>
+#include < assert.h>
+
+#include "polygon.h"
+
+namespace csce240
+{
+ 
+Polygon::Polygon(){
+    size_ =0;
+  }
+
+Polygon::Polygon(Polygon& original){
+  size_ = original.size_; 
+  VertexNode *ptr7 = & original.vertices_;
+  VertexNode *ptr8 = ptr7->next_;
+  VertexNode *ptr9 = ptr7->prev_;
+  VertexNode holder(ptr7->vertex_, ptr8, ptr9);
+  vertices_ = holder;
+}
+
+int Polygon::Init(Point2d* vertices, int count){
+  if (count<3){
+    return k_init_not_polygon_;
+  }
+  
+  for(int i = 0; i < count; ++i){
+    double xHold = vertices[i].x();
+    double yHold = vertices[i].y();
+    for(int j = i+1; j < count; ++j){
+      if(xHold == vertices[j].x() && yHold == vertices[j].y()){
+        return k_init_nonunique_; 
+      }
+    }
+  }
+  
+  for(int i = 0; i <= count; ++i){
+    double xHold = vertices[i].x();
+    double yHold = vertices[i].y();
+    if (i == (count - 2)) {
+        if((xHold == vertices[count].x() && xHold == vertices[0].x()) 
+           || (yHold == vertices[count].y() && yHold == vertices[0].y())) {
+        return k_init_has_collinear_; 
+        }  
+    } else if (i == (count -1)){
+          if((xHold == vertices[1].x() && xHold == vertices[0].x()) 
+             || (yHold == vertices[1].y() && yHold == vertices[0].y())){
+          return k_init_has_collinear_; 
+          } 
+    } else if(i != (count - 2) && i != (count - 1)) {
+        
+      for(int j = i+1; j < count ; ++j){
+        if (j < (count - 1)){
+          if((xHold == vertices[j].x() && xHold == vertices[j+1].x())
+            || (yHold == vertices[j].y() && yHold == vertices[j+1].y())){
+          return k_init_has_collinear_; 
+        }
+        }
+        } 
+  }
+  }
+  size_ = count; 
+  VertexNode *ptr;
+  VertexNode *ptr2;
+  VertexNode *ptr3;
+  VertexNode *curr;
+  for (int i = 0; i < count; ++i){
+    if(i != 0){
+      ptr = curr;
+      ptr->next_ = new VertexNode(vertices[i], ptr2, ptr);
+      //cout << ptr->next_->vertex_.ToString() << endl;
+      if(i> 2){
+      ptr->prev_->next_ =  curr;
+      } 
+      curr = ptr->next_; 
+    } else {
+      VertexNode tail(vertices[count], ptr, nullptr);
+      ptr3 = & tail;
+      //cout << ptr3->vertex_.ToString() << endl;
+      VertexNode head(vertices[i], ptr2, ptr3);
+      ptr = & head;
+      ptr->next_ = new VertexNode(vertices[i+1], nullptr, ptr);
+      ptr2 = ptr->next_;
+      vertices_ = head; 
+      curr = & vertices_;
+    }
+  }
+  
+    return 0;
+  
+
+}
+  
+VertexNode *ptr5;
+void Polygon::Offset(Vector2d by) { 
+  ptr5 = & vertices_;
+  VertexNode holder((ptr5->vertex_.Add(by)), ptr5->next_, ptr5->prev_);
+  vertices_ = holder; 
+  ptr5 = & vertices_;
+  for (int i = 1; i < size_; ++i) {
+    if (i!=(size_ - 1)){
+    VertexNode *curr = ptr5->next_;
+    curr = new VertexNode(curr->vertex_.Add(by), curr->next_, curr->prev_);
+    ptr5->next_ = curr; 
+    ptr5 = curr; 
+    } else { 
+      VertexNode *curr = ptr5->next_;
+      curr = new VertexNode(curr->vertex_.Add(by), nullptr, curr->prev_);
+      ptr5->next_ = curr; 
+      ptr5 = curr; 
+    }
+  }
+}
+
+void Polygon::Scale(double by, Point2d about){
+Vector2d unit(about.x(),about.y());
+unit = unit.GetUnit(); 
+Vector2d scalar((unit.x() * by), (unit.y() * by));
+Vector2d scalarReset = scalar;
+ptr5 = & vertices_;
+if(about.x() > ptr5->vertex_.x()){
+  scalar = scalar.ReverseY();
+} 
+if(about.y() > ptr5->vertex_.y()){
+  scalar = scalar.ReverseX();
+}   
+VertexNode holder((ptr5->vertex_.Add(scalar)), ptr5->next_, ptr5->prev_);
+vertices_ = holder; 
+ptr5 = & vertices_;
+for (int i = 1; i < size_; ++i) {
+  scalar = scalarReset;
+  if (i!=(size_ - 1)){
+    VertexNode *curr = ptr5->next_;
+    if(about.x() > curr->vertex_.x()){
+      scalar = scalar.ReverseX();
+    } 
+    if(about.y() > curr->vertex_.y()){
+      scalar = scalar.ReverseY();
+    }   
+    curr = new VertexNode(curr->vertex_.Add(scalar), curr->next_, curr->prev_);
+    ptr5->next_ = curr; 
+    ptr5 = curr; 
+  } else { 
+    VertexNode *curr = ptr5->next_;
+    if(about.x() > curr->vertex_.x()){
+      scalar = scalar.ReverseX();
+      } 
+    if(about.y() > curr->vertex_.y()){
+      scalar = scalar.ReverseY();
+    }   
+    curr = new VertexNode(curr->vertex_.Add(scalar), nullptr, curr->prev_);
+    ptr5->next_ = curr; 
+    ptr5 = curr; 
+  }
+}
+}
+
+string Polygon::ToString() const { 
+const VertexNode *ptr4;
+ ptr4 = & vertices_;
+ string str = ">" + ptr4->vertex_.ToString() + "->";
+ for (int i = 1; i < size_; ++i) {
+  VertexNode *curr = ptr4->next_;
+  Point2d tmp = curr->vertex_;
+  if (i < (size_-1)){
+  str += tmp.ToString() + "->";
+  ptr4 = curr; 
+  } else {
+    str += tmp.ToString() + "-";
+    ptr4 = curr; 
+  }
+ }
+ //cout << str << endl;
+ return str;
+  }
+
+} // namespace csce240
+            </pre></div>
+
+
+
+
+
+<div id="test8"> <pre>
+#ifndef _240_05HW_MAIN_H_
+#define _240_05HW_MAIN_H_
+
+#include < string>
+#include < vector>
+#include < list>
+#include < iostream>
+#include < assert.h>
+#include < fstream>
+using std::ifstream;
+using std::ofstream;
+
+#include "VertexNode.h"
+#include "point2d.h"
+#include "vector2d.h"
+#include "polygon.h"
+
+
+
+int main(int argc, char** argv);
+
+#endif
+
+</pre></div>
+              </div>
+
+               <div class="card black">
+              <div class="card-content white-text">
+                <p>Blockchain validification C++ Code. Takes in a file with a list of transactions and the previous instance of the chain, then validates it and calculates the nonce. Using MIT developed 256 bit encryption. </p>
+              </div>
+              <div class="card-tabs">
+                <ul class="tabs tabs-fixed-width tabs-transparent">
+                  <li class="tab"><a class="active" href="#main">blockchain.cc</a></li>
+                  <li class="tab"><a class="active" href="#picosha">picosha.h</a></li>
+                </ul>
+              </div>
+              <div class="card-content blue lighten-5">
+                <div id="main"> <pre>
+#include < string>
+#include < sstream>
+#include < fstream>
+#include "picosha2.h"
+#include < algorithm>
+
+using namespace std;
+
+bool isFirst0(string input){ // determines if the first char in string is 0
+   if (input.at(0)=='0'){ 
+    return true;
+  }
+    return false;
+}
+
+string concat(string fileName, int blockNum){ // cocncats the pieces of a block
+  ifstream inFile;
+  inFile.open(fileName);
+  string prevBlock;
+  string merkle;
+  string nonce;
+  inFile >> prevBlock;
+  inFile >> merkle;
+  inFile >>  nonce;
+  string concat;
+  concat = prevBlock + merkle + nonce;
+//cout << concat << endl;
+  return concat;
+}
+
+int hexCharToInt(char a){ // converts hex to int
+    if(a>='0' && a<='9')
+        return(a-48);
+    else if(a>='A' && a<='Z')
+        return(a-55);
+    else
+        return(a-87);
+}
+
+std::string hexToString(std::string str){ // hex to string
+    std::stringstream HexString;
+    for(int i=0;i<str.length();i++){
+        char a = str.at(i++);
+        char b = str.at(i);
+        int x = hexCharToInt(a);
+        int y = hexCharToInt(b);
+        HexString << (char)((16*x)+y);
+    }
+    return HexString.str();
+}
+
+  string toHash(string input){
+  string hex = hexToString(input);
+  string hash = picosha2::hash256_hex_string(hexToString(input));
+  return hash; 
+}
+
+bool areBlocksValid(string fileName){ //checks if all blocks are valid
+  ifstream inFile;
+  inFile.open(fileName);
+
+  string prevBlock; string merkle; string nonce; string block1;
+  inFile >> prevBlock;
+  inFile >> merkle;
+  inFile >>  nonce;
+  block1 = prevBlock + merkle + nonce;
+
+  string hash1 = toHash(block1);
+
+  string prevBlock2; string merkle2; string nonce2; string block2;
+  inFile >> prevBlock2;
+  inFile >> merkle2;
+  inFile >>  nonce2;
+  block2 = prevBlock2 + merkle2 + nonce2;
+
+  string hash2 = toHash(block2);
+
+  string prevBlock3; string merkle3; string nonce3; string block3;
+  inFile >> prevBlock3;
+  inFile >> merkle3;
+  inFile >>  nonce3;
+  block3 = prevBlock3 + merkle3 + nonce3;
+
+  string hash3 = toHash(block3);
+
+  bool hashVal1 = isFirst0(hash1);
+  bool hashVal2 = isFirst0(hash2);
+  bool hashVal3 = isFirst0(hash3);
+
+  bool allVal = (hashVal3 && hashVal2 && hashVal1);
+  //cout << allVal << endl; 
+
+  bool isLinked = false;
+
+  if((prevBlock==hash2)&&(prevBlock2==hash3)){
+    isLinked = true;
+  }
+
+  //cout << isLinked << endl;
+
+  if (isLinked&&allVal){
+    return true;
+  }
+  return false;
+}
+
+string findMerkle(string fileName){ // finds the merkle root
+    ifstream inFile;
+    inFile.open(fileName);
+    string one; string two; string three; string four; string five; string six; string seven; string eight; 
+    getline(inFile, one); getline(inFile, two); getline(inFile, three); getline(inFile, four); getline(inFile, five); getline(inFile, six); getline(inFile, seven); getline(inFile, eight);
+
+    string oneTwo = picosha2::hash256_hex_string((picosha2::hash256_hex_string(one)) + (picosha2::hash256_hex_string(two)));
+    string threeFour = picosha2::hash256_hex_string((picosha2::hash256_hex_string(three)) + (picosha2::hash256_hex_string(four)));
+    string fiveSix = picosha2::hash256_hex_string((picosha2::hash256_hex_string(five)) + (picosha2::hash256_hex_string(six)));
+    string sevenEight = picosha2::hash256_hex_string((picosha2::hash256_hex_string(seven)) + (picosha2::hash256_hex_string(eight)));
+
+    string oneFour = picosha2::hash256_hex_string(oneTwo + threeFour);
+    string fiveEight = picosha2::hash256_hex_string(fiveSix + sevenEight);
+
+    string merkleRoot = picosha2::hash256_hex_string(oneFour + fiveEight);
+    //cout << oneTwo << endl;
+
+    return merkleRoot;
+}
+
+string DecimalToHex(int decimal) { // converts decimals to hexadecimals
+  string hex ="";
+  int value = decimal; 
+  int digit = 0;
+  char hexdig = '1';
+  while (value > 0){
+    digit = value % 16; // determining remainder, then changing hexdig to match the hexadecimal value of that remainder
+    if (digit == 1){
+      hexdig = '1';
+    }if (digit == 2){
+      hexdig = '2';
+    }if (digit == 3){
+      hexdig = '3';
+    }if (digit == 4){
+      hexdig = '4';
+    }if (digit == 5){
+      hexdig = '5';
+    }if (digit == 6){
+      hexdig = '6';
+    }if (digit == 7){
+      hexdig = '7';
+    }if (digit == 8){
+      hexdig = '8';
+    }if (digit == 9){
+      hexdig = '9';
+    }if (digit == 10){
+      hexdig = 'A';
+    }if (digit == 11){
+      hexdig = 'B';
+    }if (digit == 12){
+      hexdig = 'C';
+    }if (digit == 13){
+      hexdig = 'D';
+    }if (digit == 14){
+      hexdig = 'E';
+    }if (digit == 15){
+      hexdig = 'F';
+    }
+    hex.insert(hex.begin(), hexdig); // inserting hexdig into the string
+    value /= 16; 
+  }
+  return hex;
+}
+
+int main(int argc, char *argv[]){ // main function runs program
+  string block= "";
+  string transaction = "";
+  cin>> block; 
+  cin >> transaction;
+  bool valid = areBlocksValid(block);
+  //cout << valid << endl;
+  string merkle = findMerkle(transaction);
+  if(valid == 0){
+    cout << merkle << endl;
+  } else if (valid == 1){
+    ifstream inFile;
+    inFile.open(block);
+    string prevBlock; string merkle2; string nonce; string block1;
+    inFile >> prevBlock;
+    inFile >> merkle2;
+    inFile >>  nonce;
+    block1 = prevBlock + merkle2 + nonce;
+    string hash1 = toHash(block1);
+    string mineFirst = hash1 + merkle;
+    int nonceTrack = 00000001;
+    string nonceHex = DecimalToHex(nonceTrack);
+    //cout << nonceHex.length() << endl;
+    //nonceHex = std::string( 1, '0').append( nonceHex);
+    //cout << nonceHex.length() << endl;
+    while (nonceHex.length() <8){
+      nonceHex = std::string( 1, '0').append( nonceHex);
+      //cout<< nonceHex.length() << endl;
+    }
+    //cout << nonceHex << endl;
+    string mine = mineFirst + nonceHex;
+    cout << mine << endl;
+    string mineHash = picosha2::hash256_hex_string(mine);
+    while (isFirst0(mineHash)!=true){
+      nonceTrack = nonceTrack + 1; 
+      nonceHex = DecimalToHex(nonceTrack);
+      while (nonceHex.length() <8){
+      nonceHex = std::string( 1, '0').append( nonceHex);
+      //cout<< nonceHex.length() << endl;
+    }
+      string mine = mineFirst + nonceHex;
+      mineHash = picosha2::hash256_hex_string(mine);
+    }
+    //cout << mineHash << endl;
+    
+    cout << hash1 << " " << merkle << " " << nonceHex << endl; 
+  }
+  
+}
+                </pre> </div>
+<div id="picosha"> <pre>
+/*
+The MIT License (MIT)
+
+Copyright (C) 2017 okdshin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#ifndef PICOSHA2_H
+#define PICOSHA2_H
+// picosha2:20140213
+
+#ifndef PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR
+#define PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR \
+    1048576  //=1024*1024: default is 1MB memory
+#endif
+
+#include <algorithm>
+#include <cassert>
+#include <iterator>
+#include <sstream>
+#include <vector>
+
+namespace picosha2 {
+typedef unsigned long word_t;
+typedef unsigned char byte_t;
+
+namespace detail {
+inline byte_t mask_8bit(byte_t x) { return x & 0xff; }
+
+inline word_t mask_32bit(word_t x) { return x & 0xffffffff; }
+
+const word_t add_constant[64] = {
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
+    0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+    0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
+    0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+    0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+    0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+    0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
+    0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
+
+const word_t initial_message_digest[8] = {0x6a09e667, 0xbb67ae85, 0x3c6ef372,
+                                          0xa54ff53a, 0x510e527f, 0x9b05688c,
+                                          0x1f83d9ab, 0x5be0cd19};
+
+inline word_t ch(word_t x, word_t y, word_t z) { return (x & y) ^ ((~x) & z); }
+
+inline word_t maj(word_t x, word_t y, word_t z) {
+    return (x & y) ^ (x & z) ^ (y & z);
+}
+
+inline word_t rotr(word_t x, std::size_t n) {
+    assert(n < 32);
+    return mask_32bit((x >> n) | (x << (32 - n)));
+}
+
+inline word_t bsig0(word_t x) { return rotr(x, 2) ^ rotr(x, 13) ^ rotr(x, 22); }
+
+inline word_t bsig1(word_t x) { return rotr(x, 6) ^ rotr(x, 11) ^ rotr(x, 25); }
+
+inline word_t shr(word_t x, std::size_t n) {
+    assert(n < 32);
+    return x >> n;
+}
+
+inline word_t ssig0(word_t x) { return rotr(x, 7) ^ rotr(x, 18) ^ shr(x, 3); }
+
+inline word_t ssig1(word_t x) { return rotr(x, 17) ^ rotr(x, 19) ^ shr(x, 10); }
+
+template <typename RaIter1, typename RaIter2>
+void hash256_block(RaIter1 message_digest, RaIter2 first, RaIter2 last) {
+    assert(first + 64 == last);
+    static_cast<void>(last);  // for avoiding unused-variable warning
+    word_t w[64];
+    std::fill(w, w + 64, 0);
+    for (std::size_t i = 0; i < 16; ++i) {
+        w[i] = (static_cast<word_t>(mask_8bit(*(first + i * 4))) << 24) |
+               (static_cast<word_t>(mask_8bit(*(first + i * 4 + 1))) << 16) |
+               (static_cast<word_t>(mask_8bit(*(first + i * 4 + 2))) << 8) |
+               (static_cast<word_t>(mask_8bit(*(first + i * 4 + 3))));
+    }
+    for (std::size_t i = 16; i < 64; ++i) {
+        w[i] = mask_32bit(ssig1(w[i - 2]) + w[i - 7] + ssig0(w[i - 15]) +
+                          w[i - 16]);
+    }
+
+    word_t a = *message_digest;
+    word_t b = *(message_digest + 1);
+    word_t c = *(message_digest + 2);
+    word_t d = *(message_digest + 3);
+    word_t e = *(message_digest + 4);
+    word_t f = *(message_digest + 5);
+    word_t g = *(message_digest + 6);
+    word_t h = *(message_digest + 7);
+
+    for (std::size_t i = 0; i < 64; ++i) {
+        word_t temp1 = h + bsig1(e) + ch(e, f, g) + add_constant[i] + w[i];
+        word_t temp2 = bsig0(a) + maj(a, b, c);
+        h = g;
+        g = f;
+        f = e;
+        e = mask_32bit(d + temp1);
+        d = c;
+        c = b;
+        b = a;
+        a = mask_32bit(temp1 + temp2);
+    }
+    *message_digest += a;
+    *(message_digest + 1) += b;
+    *(message_digest + 2) += c;
+    *(message_digest + 3) += d;
+    *(message_digest + 4) += e;
+    *(message_digest + 5) += f;
+    *(message_digest + 6) += g;
+    *(message_digest + 7) += h;
+    for (std::size_t i = 0; i < 8; ++i) {
+        *(message_digest + i) = mask_32bit(*(message_digest + i));
+    }
+}
+
+}  // namespace detail
+
+template <typename InIter>
+void output_hex(InIter first, InIter last, std::ostream& os) {
+    os.setf(std::ios::hex, std::ios::basefield);
+    while (first != last) {
+        os.width(2);
+        os.fill('0');
+        os << static_cast<unsigned int>(*first);
+        ++first;
+    }
+    os.setf(std::ios::dec, std::ios::basefield);
+}
+
+template <typename InIter>
+void bytes_to_hex_string(InIter first, InIter last, std::string& hex_str) {
+    std::ostringstream oss;
+    output_hex(first, last, oss);
+    hex_str.assign(oss.str());
+}
+
+template <typename InContainer>
+void bytes_to_hex_string(const InContainer& bytes, std::string& hex_str) {
+    bytes_to_hex_string(bytes.begin(), bytes.end(), hex_str);
+}
+
+template <typename InIter>
+std::string bytes_to_hex_string(InIter first, InIter last) {
+    std::string hex_str;
+    bytes_to_hex_string(first, last, hex_str);
+    return hex_str;
+}
+
+template <typename InContainer>
+std::string bytes_to_hex_string(const InContainer& bytes) {
+    std::string hex_str;
+    bytes_to_hex_string(bytes, hex_str);
+    return hex_str;
+}
+
+class hash256_one_by_one {
+   public:
+    hash256_one_by_one() { init(); }
+
+    void init() {
+        buffer_.clear();
+        std::fill(data_length_digits_, data_length_digits_ + 4, 0);
+        std::copy(detail::initial_message_digest,
+                  detail::initial_message_digest + 8, h_);
+    }
+
+    template <typename RaIter>
+    void process(RaIter first, RaIter last) {
+        add_to_data_length(std::distance(first, last));
+        std::copy(first, last, std::back_inserter(buffer_));
+        std::size_t i = 0;
+        for (; i + 64 <= buffer_.size(); i += 64) {
+            detail::hash256_block(h_, buffer_.begin() + i,
+                                  buffer_.begin() + i + 64);
+        }
+        buffer_.erase(buffer_.begin(), buffer_.begin() + i);
+    }
+
+    void finish() {
+        byte_t temp[64];
+        std::fill(temp, temp + 64, 0);
+        std::size_t remains = buffer_.size();
+        std::copy(buffer_.begin(), buffer_.end(), temp);
+        temp[remains] = 0x80;
+
+        if (remains > 55) {
+            std::fill(temp + remains + 1, temp + 64, 0);
+            detail::hash256_block(h_, temp, temp + 64);
+            std::fill(temp, temp + 64 - 4, 0);
+        } else {
+            std::fill(temp + remains + 1, temp + 64 - 4, 0);
+        }
+
+        write_data_bit_length(&(temp[56]));
+        detail::hash256_block(h_, temp, temp + 64);
+    }
+
+    template <typename OutIter>
+    void get_hash_bytes(OutIter first, OutIter last) const {
+        for (const word_t* iter = h_; iter != h_ + 8; ++iter) {
+            for (std::size_t i = 0; i < 4 && first != last; ++i) {
+                *(first++) = detail::mask_8bit(
+                    static_cast<byte_t>((*iter >> (24 - 8 * i))));
+            }
+        }
+    }
+
+   private:
+    void add_to_data_length(word_t n) {
+        word_t carry = 0;
+        data_length_digits_[0] += n;
+        for (std::size_t i = 0; i < 4; ++i) {
+            data_length_digits_[i] += carry;
+            if (data_length_digits_[i] >= 65536u) {
+                carry = data_length_digits_[i] >> 16;
+                data_length_digits_[i] &= 65535u;
+            } else {
+                break;
+            }
+        }
+    }
+    void write_data_bit_length(byte_t* begin) {
+        word_t data_bit_length_digits[4];
+        std::copy(data_length_digits_, data_length_digits_ + 4,
+                  data_bit_length_digits);
+
+        // convert byte length to bit length (multiply 8 or shift 3 times left)
+        word_t carry = 0;
+        for (std::size_t i = 0; i < 4; ++i) {
+            word_t before_val = data_bit_length_digits[i];
+            data_bit_length_digits[i] <<= 3;
+            data_bit_length_digits[i] |= carry;
+            data_bit_length_digits[i] &= 65535u;
+            carry = (before_val >> (16 - 3)) & 65535u;
+        }
+
+        // write data_bit_length
+        for (int i = 3; i >= 0; --i) {
+            (*begin++) = static_cast<byte_t>(data_bit_length_digits[i] >> 8);
+            (*begin++) = static_cast<byte_t>(data_bit_length_digits[i]);
+        }
+    }
+    std::vector<byte_t> buffer_;
+    word_t data_length_digits_[4];  // as 64bit integer (16bit x 4 integer)
+    word_t h_[8];
+};
+
+inline void get_hash_hex_string(const hash256_one_by_one& hasher,
+                                std::string& hex_str) {
+    byte_t hash[32];
+    hasher.get_hash_bytes(hash, hash + 32);
+    return bytes_to_hex_string(hash, hash + 32, hex_str);
+}
+
+inline std::string get_hash_hex_string(const hash256_one_by_one& hasher) {
+    std::string hex_str;
+    get_hash_hex_string(hasher, hex_str);
+    return hex_str;
+}
+
+namespace impl {
+template <typename RaIter, typename OutIter>
+void hash256_impl(RaIter first, RaIter last, OutIter first2, OutIter last2, int,
+                  std::random_access_iterator_tag) {
+    hash256_one_by_one hasher;
+    // hasher.init();
+    hasher.process(first, last);
+    hasher.finish();
+    hasher.get_hash_bytes(first2, last2);
+}
+
+template <typename InputIter, typename OutIter>
+void hash256_impl(InputIter first, InputIter last, OutIter first2,
+                  OutIter last2, int buffer_size, std::input_iterator_tag) {
+    std::vector<byte_t> buffer(buffer_size);
+    hash256_one_by_one hasher;
+    // hasher.init();
+    while (first != last) {
+        int size = buffer_size;
+        for (int i = 0; i != buffer_size; ++i, ++first) {
+            if (first == last) {
+                size = i;
+                break;
+            }
+            buffer[i] = *first;
+        }
+        hasher.process(buffer.begin(), buffer.begin() + size);
+    }
+    hasher.finish();
+    hasher.get_hash_bytes(first2, last2);
+}
+}
+
+template <typename InIter, typename OutIter>
+void hash256(InIter first, InIter last, OutIter first2, OutIter last2,
+             int buffer_size = PICOSHA2_BUFFER_SIZE_FOR_INPUT_ITERATOR) {
+    picosha2::impl::hash256_impl(
+        first, last, first2, last2, buffer_size,
+        typename std::iterator_traits<InIter>::iterator_category());
+}
+
+template <typename InIter, typename OutContainer>
+void hash256(InIter first, InIter last, OutContainer& dst) {
+    hash256(first, last, dst.begin(), dst.end());
+}
+
+template <typename InContainer, typename OutIter>
+void hash256(const InContainer& src, OutIter first, OutIter last) {
+    hash256(src.begin(), src.end(), first, last);
+}
+
+template <typename InContainer, typename OutContainer>
+void hash256(const InContainer& src, OutContainer& dst) {
+    hash256(src.begin(), src.end(), dst.begin(), dst.end());
+}
+
+template <typename InIter>
+void hash256_hex_string(InIter first, InIter last, std::string& hex_str) {
+    byte_t hashed[32];
+    hash256(first, last, hashed, hashed + 32);
+    std::ostringstream oss;
+    output_hex(hashed, hashed + 32, oss);
+    hex_str.assign(oss.str());
+}
+
+template <typename InIter>
+std::string hash256_hex_string(InIter first, InIter last) {
+    std::string hex_str;
+    hash256_hex_string(first, last, hex_str);
+    return hex_str;
+}
+
+inline void hash256_hex_string(const std::string& src, std::string& hex_str) {
+    hash256_hex_string(src.begin(), src.end(), hex_str);
+}
+
+template <typename InContainer>
+void hash256_hex_string(const InContainer& src, std::string& hex_str) {
+    hash256_hex_string(src.begin(), src.end(), hex_str);
+}
+
+template <typename InContainer>
+std::string hash256_hex_string(const InContainer& src) {
+    return hash256_hex_string(src.begin(), src.end());
+}
+
+}  // namespace picosha2
+
+#endif  // PICOSHA2_H
+
+</pre><div>
+            </div>
+          </div>
+          </div>
+
+       
+</body>
+</html>
